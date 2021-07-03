@@ -68,6 +68,26 @@ app.post('/api/persons', (req, res) => {
     id: id,
   };
 
+  if (!body.name) {
+    return res.status(400).json({
+      error: 'name missing',
+    });
+  }
+
+  if (!body.number) {
+    return res.status(400).json({
+      error: 'number missing',
+    });
+  }
+
+  if (
+    persons.map((p) => p.name.toLowerCase()).includes(body.name.toLowerCase())
+  ) {
+    return res.status(400).json({
+      error: 'name must be unique',
+    });
+  }
+
   persons = persons.concat(newPerson);
   res.json(newPerson);
 });
