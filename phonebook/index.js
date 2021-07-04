@@ -13,13 +13,12 @@ app.use(express.json());
 app.use(express.static('dist'));
 
 app.use(cors());
-morgan.token('body', (req, res) => JSON.stringify(req.body));
 
+morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :body')
 );
 
-// express routes
 // app.get('/', (req, res) => {
 //   res.send('<h1>Hello world!</h1>');
 // });
@@ -46,38 +45,28 @@ app.get('/api/persons/:id', (req, res) => {
 //   res.status(204).end();
 // });
 
-// app.post('/api/persons', (req, res) => {
-//   const body = req.body;
-//   const id = Math.floor(Math.random() * 100);
-//   const newPerson = {
-//     name: body.name,
-//     number: body.number,
-//     id: id,
-//   };
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
 
-//   if (!body.name) {
-//     return res.status(400).json({
-//       error: 'name missing',
-//     });
-//   }
+  if (!body.name) {
+    return res.status(400).json({
+      error: 'name missing',
+    });
+  }
 
-//   if (!body.number) {
-//     return res.status(400).json({
-//       error: 'number missing',
-//     });
-//   }
+  if (!body.number) {
+    return res.status(400).json({
+      error: 'number missing',
+    });
+  }
 
-//   if (
-//     persons.map((p) => p.name.toLowerCase()).includes(body.name.toLowerCase())
-//   ) {
-//     return res.status(400).json({
-//       error: 'name must be unique',
-//     });
-//   }
+  const newPerson = new Person({
+    name: body.name,
+    number: body.number,
+  });
 
-//   persons = persons.concat(newPerson);
-//   res.json(newPerson);
-// });
+  newPerson.save().then((savedPerson) => res.json(savedPerson));
+});
 
 const PORT = process.env.PORT;
 
