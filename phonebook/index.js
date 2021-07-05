@@ -19,17 +19,15 @@ app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :body')
 );
 
-// app.get('/', (req, res) => {
-//   res.send('<h1>Hello world!</h1>');
-// });
-
-// const info = `<p>Phonebook has info for ${
-//   persons.length
-// } people</p><p>${new Date()}</p>`;
-
-// app.get('/info', (req, res) => {
-//   res.send(info);
-// });
+app.get('/info', (req, res) => {
+  Person.find({}).then((persons) => {
+    res.send(
+      `<p>Phonebook has info for ${
+        persons.length
+      } people</p><p>${new Date()}</p>`
+    );
+  });
+});
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then((persons) => res.json(persons));
